@@ -1,0 +1,46 @@
+appId: com.aurora.union.workbench
+productName: Aurora Union Workbench
+artifactName: ${productName}-Setup-${version}-${arch}.${ext}
+
+directories:
+  output: dist
+
+files:
+  - dist/**
+  - assets/**
+  - package.json
+
+asar: true
+
+# 将 API / Web build 产物作为 resources 打包进安装包，desktop 运行时从 process.resourcesPath 读取。
+extraResources:
+  - from: ../api/dist
+    to: apps/api/dist
+  - from: ../web/.next
+    to: apps/web/.next
+  - from: ../web/public
+    to: apps/web/public
+  - from: ../web/package.json
+    to: apps/web/package.json
+  - from: ../license-gen/assets/keys/public.key
+    to: apps/license-gen/assets/keys/public.key
+  # 运行 `next start` / `node dist/main.js` 需要对应依赖；这里直接打包工作区的 node_modules。
+  - from: ../../node_modules
+    to: node_modules
+
+win:
+  # 关键：禁用 signtool 签名/写元信息，避免卡在 “signing with signtool.exe ... elevate.exe”
+  signAndEditExecutable: false
+  target:
+    - target: nsis
+      arch:
+        - x64
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+
+  # 关键：改用 zip（打包更快，避免 7z 高压缩长时间无输出）
+  useZip: true

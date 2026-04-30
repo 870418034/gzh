@@ -1,0 +1,19 @@
+{
+  "name": "desktop",
+  "version": "0.0.1",
+  "private": true,
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "pnpm --filter api build && pnpm --filter desktop build && cross-env NODE_ENV=development electron .",
+    "build:win": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false pnpm --filter api build && pnpm --filter web build && pnpm --filter desktop build && electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "cross-env": "^7.0.3",
+    "electron": "^35.0.0",
+    "electron-builder": "^26.0.0",
+    "typescript": "^5.7.3"
+  }
+}
+

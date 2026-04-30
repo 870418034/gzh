@@ -1,0 +1,11 @@
+{
+  "name": "aurora-union-workbench",
+  "private": true,
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "dev": "pnpm -r dev",
+    "dev:docker": "docker compose -f docker/docker-compose.yml up -d",
+    "db:down": "docker compose -f docker/docker-compose.yml down -v",
+    "test": "pnpm -r test"
+  }
+}

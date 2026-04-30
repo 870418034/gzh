@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# Next.js
+.next/
+out/
+
+# Nest/TS build
+dist/
+*.tsbuildinfo
+
+# env files
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# license generator keys (never commit private key)
+apps/license-gen/assets/keys/private.key

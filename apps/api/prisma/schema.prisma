@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  aiConnections AiConnection[]
+  routerProfiles RouterProfile[]
+  personas      Persona[]
+  tasks         Task[]
+  industryPopularItems IndustryPopularItem[]
+}
+
+model AiConnection {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String
+  type          String // openai_compatible | custom_http
+  baseUrl       String?
+  authEncrypted String
+  defaultModel  String?
+  status        String   @default("active") // active | disabled | failed
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model RouterProfile {
+  id               String   @id @default(cuid())
+  userId           String
+  name             String
+  isDefault        Boolean  @default(true)
+  routingRulesJson Json
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model Persona {
+  id        String   @id @default(cuid())
+  userId    String
+  industry  String?
+  identity  String?
+  product   String?
+  region    String?
+  extraJson Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model Task {
+  id             String   @id @default(cuid())
+  userId         String
+  type           String
+  status         String   @default("pending")
+  inputJson      Json
+  outputJson     Json?
+  provider       String?
+  model          String?
+  aiConnectionId String?
+  errorCode      String?
+  errorMessage   String?
+  latencyMs      Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, type, status])
+}
+
+model IndustryPopularItem {
+  id        String   @id @default(cuid())
+  userId    String
+  platform  String?
+  industry  String?
+  title     String
+  sourceUrl String?
+  notes     String?
+  metaJson  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([userId, platform])
+  @@index([userId, industry])
+}

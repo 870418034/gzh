@@ -1,0 +1,28 @@
+{
+  "name": "license-gen",
+  "version": "0.0.1",
+  "private": true,
+  "type": "commonjs",
+  "bin": {
+    "license-gen": "dist/index.js"
+  },
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "build": "pnpm --filter @aurora/licensing build && tsc -p tsconfig.json",
+    "build:exe": "pnpm build && pkg . --targets node18-win-x64 --output dist/AuroraLicenseGen.exe"
+  },
+  "dependencies": {
+    "@aurora/licensing": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "pkg": "^5.8.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "pkg": {
+    "targets": [
+      "node20-win-x64"
+    ]
+  }
+}
