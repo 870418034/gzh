@@ -6,12 +6,18 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: "false"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -19,11 +25,10 @@ jobs:
           node-version: "20"
           cache: "pnpm"
 
-      - name: Enable pnpm
+      - name: Verify versions
         shell: pwsh
         run: |
-          corepack enable
-          corepack prepare pnpm@9.0.0 --activate
+          node -v
           pnpm -v
 
       - name: Install dependencies
